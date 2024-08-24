@@ -1,4 +1,4 @@
-// import { error } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit'
 import { createPool, sql } from '@vercel/postgres'
 import { POSTGRES_URL } from '$env/static/private'
 
@@ -64,21 +64,24 @@ async function seed() {
 /** @type {import('./$types').Actions} */
 export const actions = {
 	
-  // update: async ({ request }) => {
-  //   const data = await request.formData();
-  //   const db = createPool({ connectionString: POSTGRES_URL })
-  //   const client = await db.connect();
+  update: async ({ request }) => {
+    const data = await request.formData();
+    const db = createPool({ connectionString: POSTGRES_URL });
+    const client = await db.connect();
 
-  //   const email = data.get('email');
-	// 	const name = data.get('name');
+    const id = data.get('id');
+    const newEmail = data.get('email');
+    const newName = data.get('name');
 
-  //   const updateUser = await client.sql`
-  //   UPDATE names
-  //   SET email = ${email}, name = ${name}
-  //   WHERE     ;`
-	
-	// 	return { success: true };
-	// },
+    const updateUser = await client.sql`
+      UPDATE names
+      SET email = ${newEmail}, name = ${newName}
+      WHERE id = ${id};
+    `;
+
+    return { success: true };
+  },
+
 
   delete: async ({ request }) => {
     const data = await request.formData();
